@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaPulse - Workouts</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons for the clean look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="vp-body">
+
+   <header>
+        <nav>
+            <img src="GreenLogo.png" class="logo-img" >
+            <div class="nav-links">
+                <a href="page1.html">Home</a>
+                <a href="page2.html">Calculator</a>
+                <a href="fit.html">Scheduler</a>
+                <a href="#">Workouts</a>
+            </div>
+            <div class="nav-auth">
+                <a href="#" class="login">Login</a>
+                <a href="#" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="vp-container">
+        <!-- Hero Section -->
+        <section class="vp-hero">
+            <div class="vp-hero-content">
+                <h1>Forge Your <span>Peak Physique</span></h1>
+                <p>Scientifically backed muscle growth programs and height optimization routines designed for the modern athlete.</p>
+                <div class="vp-hero-btns">
+                    <button class="vp-btn-green">Explore Routines</button>
+                    <button class="vp-btn-outline">Personal Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <div class="vp-filter-bar">
+            <button class="vp-filter-chip active" data-filter="all">All Routines</button>
+            <button class="vp-filter-chip" data-filter="hypertrophy">Muscle Hypertrophy</button>
+            <button class="vp-filter-chip" data-filter="height">Height Optimization</button>
+            <button class="vp-filter-chip" data-filter="strength">Strength Foundation</button>
+            <button class="vp-filter-chip" data-filter="recovery">Recovery</button>
+        </div>
+
+        <!-- Workout Cards Grid -->
+        <section class="vp-workout-grid">
+            <!-- Featured Card -->
+            <div class="vp-card vp-featured" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80');">
+                <div class="vp-badge">MOST POPULAR</div>
+                <div class="vp-card-info">
+                    <span class="vp-meta"><i data-lucide="clock"></i> 45 min | <i data-lucide="bar-chart"></i> Advanced</span>
+                    <h3>Upper Body Hypertrophy Masterclass</h3>
+                    <p>Targeted volume-based training to maximize protein synthesis.</p>
+                    <div class="vp-progress-line"><div class="fill" style="width: 70%;"></div></div>
+                </div>
+            </div>
+
+            <!-- Small Card 1 -->
+            <div class="vp-card vp-standard">
+                <div class="vp-card-img"><img src="" alt="Yoga"></div>
+                <div class="vp-card-body">
+                    <h4>Spinal Decompression & Posture</h4>
+                    <span class="vp-meta"><i data-lucide="clock"></i> 15m | <i data-lucide="zap"></i> Easy</span>
+                    <button class="vp-btn-start">Start Routine</button>
+                </div>
+            </div>
+            
+            <!-- Repeat standard cards for Explosive Power, Height Flow, etc. -->
+        </section>
+
+        <!-- Feature Banner -->
+        <section class="vp-promo-banner">
+            <div class="vp-promo-text">
+                <span class="vp-subtitle"><i data-lucide="sparkles"></i> THE SCIENCE OF GROWTH</span>
+                <h2>Dynamic Height Optimization</h2>
+                <p>Our proprietary routines focus on spinal decompression, pelvic alignment, and hormone-stimulating movements.</p>
+                <div class="vp-stats-row">
+                    <div class="vp-stat-box"><strong>+2.4cm</strong><small>AVG. POSTURE GAIN</small></div>
+                    <div class="vp-stat-box"><strong>15 min</strong><small>DAILY PROTOCOL</small></div>
+                </div>
+            </div>
+            <div class="vp-promo-image">
+                <img src="" alt="Anatomy">
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="vp-analytics">
+            <div class="vp-chart-card">
+                <h5>Muscle Growth Trajectory</h5>
+                <div class="vp-bar-chart">
+                    <div class="bar" style="height: 40%;"><span>MON</span></div>
+                    <div class="bar" style="height: 60%;"><span>TUE</span></div>
+                    <div class="bar" style="height: 50%;"><span>WED</span></div>
+                    <div class="bar highlight" style="height: 90%;"><span>SUN</span></div>
+                </div>
+            </div>
+            <div class="vp-goals-card">
+                <h5>Daily Goals</h5>
+                <div class="vp-radial-progress">
+                    <div class="vp-percentage">75% <small>COMPLETE</small></div>
+                </div>
+                <ul class="vp-goal-list">
+                    <li><span class="dot green"></span> Protein Intake <span class="val">145g / 180g</span></li>
+                    <li><span class="dot red"></span> Calorie Target <span class="val">2.4k / 3k</span></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    
+  
+<footer class="vp-footer">
+  <div class="vp-footer-container">
+
+    <div class="vp-footer-brand">
+      <img src="GreenLogo.png" alt="VitaPulse Logo" class="vp-footer-logo">
+      <p>Precision wellness designed for modern living. Track nutrition, workouts, and your healthy routine.</p>
+
+      <div class="vp-socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+
+    <div class="vp-footer-links">
+      <h3>Pages</h3>
+      <a href="page1.html">Home</a>
+      <a href="page2.html">Calculator</a>
+      <a href="fit.html">Scheduler</a>
+      <a href="workouts.html">Workouts</a>
+    </div>
+   <a href="VitaPulse .html">BMI Calculator</a>
+      <a href=ccalculator.htmll">Calories</a>
+      <a href="index.html">Fitness Plan</a>
+      <a href="workouts.html">Workout Library</a>
+    </div>
+    <div class="vp-footer-newsletter">
+      <h3>Contact</h3>
+      <p>Email: vitapulse@gmail.com</p>
+      <p>Lebanon, Beirut</p>
+    </div>
+
+  </div>
+
+  <div class="vp-footer-bottom">
+    <p>© 2026 VitaPulse | Rana & Mary TEAM</p>
+  </div>
+</footer>
+   
+
+    <script src="script3.js"></script>
+</body>
+</html>

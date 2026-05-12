@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<head>
+    <title>calculator</title>
+     <link rel="stylesheet" href="style.css">
+     <linkvrel="page1" href="page1.html"></linkvrel>
+      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<header>
+        <nav>
+            <img src="img/" class="logo-img" >
+            <div class="nav-links">
+                <a href="page1.html">Home</a>
+                <a href="page2.html">Calculator</a>
+                <a href="fit.html">Scheduler</a>
+                <a href="#">Workouts</a>
+            </div>
+            <div class="nav-auth">
+                <a href="#" class="login">Login</a>
+                <a href="#" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+        </header>
+        <main class="wrapper">
+        <section class="intro">
+            <h1>Calorie Calculator</h1>
+            <p>Precision nutrition starts with the right numbers. Calculate your daily requirements based on your unique body profile and activity level.</p>
+        </section>
+
+        <div class="dashboard-grid">
+            <!-- Left: Calculator Form -->
+            <aside class="calc-card">
+                <form>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>GENDER</label>
+                            <div class="toggle-group">
+                                <button type="button" class="active"><b></b>Male</button>
+                                <button type="button">Female</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>AGE</label>
+                            <input type="number" value="25">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>WEIGHT (KG)</label>
+                            <input type="number" value="70">
+                        </div>
+                        <div class="input-group">
+                            <label>HEIGHT (CM)</label>
+                            <input type="number" value="175">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>ACTIVITY LEVEL</label>
+                        <select>
+                            <option>Moderately Active (3-5 days/week)</option>
+                        </select>
+                    </div>
+
+                    <button class="calculate-btn">Calculate Needs</button>
+                </form>
+            </aside>
+
+            <!-- Right: Results -->
+            <section class="results-area">
+                <div class="maintenance-card">
+                    <div class="text-content">
+                        <span>MAINTENANCE CALORIES</span>
+                        <h2>2,450 <span>kcal/day</span></h2>
+                        <p>This is the amount of energy your body needs to maintain your current weight at your current activity level.</p>
+                    </div>
+                    <div class="circular-progress">
+                        <div class="inner-circle">⚡</div>
+                    </div>
+                </div>
+
+                <div class="secondary-cards">
+                    <div class="mini-card weight-loss">
+                        <label>📉 WEIGHT LOSS</label>
+                        <h3>1,950 <span>kcal</span></h3>
+                        <p>-500 kcal deficit for safe, sustainable fat loss of ~0.5kg per week.</p>
+                        <div class="progress-bar"><div class="fill"></div></div>
+                    </div>
+                    <div class="mini-card weight-gain">
+                        <label>📈 WEIGHT GAIN</label>
+                        <h3>2,750 <span>kcal</span></h3>
+                        <p>+300 kcal surplus for lean muscle growth with minimal fat gain.</p>
+                        <div class="progress-bar"><div class="fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="macros-card">
+                    <div class="macros-info">
+                        <h3>Suggested Macros</h3>
+                        <p>Based on a 40/30/30 balanced distribution for your maintenance level.</p>
+                        <div class="macro-row">
+                            <span>Protein</span> <strong>245g (40%)</strong>
+                            <div class="bar protein-bar"></div>
+                        </div>
+                        <div class="macro-row">
+                            <span>Carbs</span> <strong>184g (30%)</strong>
+                            <div class="bar carbs-bar"></div>
+                        </div>
+                        <div class="macro-row">
+                            <span>Fats</span> <strong>82g (30%)</strong>
+                            <div class="bar fats-bar"></div>
+                        </div>
+                    </div>
+                    <div class="meal-image">
+                        <img src="plate0.png" alt="Prep Meals">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    
+<footer class="vp-footer">
+  <div class="vp-footer-container">
+
+    <div class="vp-footer-brand">
+      <img src="GreenLogo.png" alt="VitaPulse Logo" class="vp-footer-logo">
+      <p>Precision wellness designed for modern living. Track nutrition, workouts, and your healthy routine.</p>
+
+      <div class="vp-socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+
+    <div class="vp-footer-links">
+      <h3>Pages</h3>
+      <a href="page1.html">Home</a>
+      <a href="page2.html">Calculator</a>
+      <a href="fit.html">Scheduler</a>
+      <a href="workouts.html">Workouts</a>
+    </div>
+
+    <div class="vp-footer-links">
+      <h3>Tools</h3>
+      <a href="VitaPulse .html">BMI Calculator</a>
+      <a href=ccalculator.htmll">Calories</a>
+      <a href="index.html">Fitness Plan</a>
+      <a href="workouts.html">Workout Library</a>
+    </div>
+
+    <div class="vp-footer-newsletter">
+      <h3>Contact</h3>
+      <p>Email: vitapulse@gmail.com</p>
+      <p>Lebanon, Beirut</p>
+    </div>
+
+  </div>
+
+  <div class="vp-footer-bottom">
+    <p>© 2026 VitaPulse | Rana & Mary TEAM</p>
+  </div>
+</footer>
+   
+</body>
+<script src="script.js"></script>
+</html>
