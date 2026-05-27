@@ -1,0 +1,3636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitaPulse Food Search</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: #f5fbf7;
+      color: #063b31;
+    }
+
+    header {
+      background: white;
+      border-bottom: 1px solid #e5eee9;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 800;
+      color: #004d40;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #315b54;
+      font-weight: 700;
+    }
+
+    .nav-links a.active {
+      color: #944521;
+    }
+
+    .hero {
+      width: 90%;
+      max-width: 1200px;
+      margin: 45px auto 30px;
+      background: linear-gradient(135deg, #004d40, #087760);
+      color: white;
+      padding: 45px;
+      border-radius: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 25px;
+      box-shadow: 0 20px 45px rgba(0, 77, 64, 0.18);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      line-height: 1.8;
+      font-size: 17px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 20px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .stat-box h3 {
+      font-size: 30px;
+    }
+
+    .search-section {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0,77,64,0.08);
+      border: 1px solid #e5eee9;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 17px;
+      border: 1px solid #d9e8e2;
+      border-radius: 16px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-box button {
+      border: none;
+      padding: 0 28px;
+      background: #944521;
+      color: white;
+      border-radius: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .page-layout {
+      width: 90%;
+      max-width: 1200px;
+      margin: 30px auto 70px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 25px;
+      align-items: start;
+    }
+
+    .category-sidebar {
+      background: white;
+      border: 1px solid #dcece6;
+      border-radius: 22px;
+      padding: 25px;
+      position: sticky;
+      top: 100px;
+      box-shadow: 0 12px 30px rgba(0,77,64,0.08);
+    }
+
+    .category-sidebar h3 {
+      color: #004d40;
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .side-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 10px;
+      border-radius: 14px;
+      cursor: pointer;
+      color: #345c55;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .side-item:hover,
+    .side-item.active {
+      background: #eaf7f2;
+      color: #004d40;
+    }
+
+    .side-item b {
+      color: #6b7c78;
+      font-size: 13px;
+    }
+
+    .food-content {
+      min-width: 0;
+    }
+
+    .top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .top-line h2 {
+      color: #004d40;
+      font-size: 28px;
+    }
+
+    .top-line span {
+      color: #6b7c78;
+      font-weight: 700;
+    }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid #e5eee9;
+      box-shadow: 0 12px 28px rgba(0,77,64,0.07);
+      transition: 0.25s;
+    }
+
+    .food-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 165px;
+      object-fit: cover;
+      background: #edf7f3;
+    }
+
+    .food-info {
+      padding: 16px;
+    }
+
+    .category {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #e9f8f3;
+      color: #004d40;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .food-info h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .calories {
+      color: #944521;
+      font-weight: 800;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .detail-box {
+      background: #f7fbf9;
+      padding: 8px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: #60736f;
+      font-weight: 700;
+    }
+
+    .detail-box strong {
+      display: block;
+      color: #063b31;
+    }
+
+    .empty-message {
+      display: none;
+      background: white;
+      padding: 45px;
+      border-radius: 20px;
+      text-align: center;
+      color: #6b7c78;
+    }
+
+    footer {
+      background: #004d40;
+      color: white;
+      text-align: center;
+      padding: 28px;
+    }
+
+    @media (max-width: 950px) {
+      .hero,
+      .page-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .category-sidebar {
+        position: static;
+      }
+
+      .food-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        height: auto;
+        padding: 18px 0;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero-stats,
+      .food-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      .search-box button {
+        padding: 16px;
+      }
+    }
+    .gram-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #60736f;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.gram-input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d9e8e2;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  outline: none;
+  font-weight: 700;
+  color: #063b31;
+}
+
+.per-note {
+  margin-top: 10px;
+  color: #7b8b87;
+  font-size: 12px;
+  font-weight: 600;
+}
+  </style>
+</head>
+
+<body>
+
+<header>
+  <nav>
+    <div class="logo">VitaPulse</div>
+    <div class="nav-links">
+      <a href="page1.html">Home</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="food-search.html" class="active">Food Search</a>
+      <a href="fit.html">Scheduler</a>
+    </div>
+  </nav>
+</header>
+
+
+
+<section class="search-section">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search apple, chicken, tabbouleh, oreo, snickers...">
+    <button type="button" onclick="searchFood()">
+      <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+  </div>
+</section>
+
+<div class="page-layout">
+
+  <aside class="category-sidebar">
+    <h3>Categories</h3>
+
+    <div class="side-item active" onclick="filterCategory('All', this)">
+      <span>All Foods</span><b>25,432</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Fruit', this)">
+      <span>Fruits</span><b>3,286</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Vegetable', this)">
+      <span>Vegetables</span><b>2,891</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Lebanese Food', this)">
+      <span>Lebanese Food</span><b>1,246</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Snack', this)">
+      <span>Snacks</span><b>1,902</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Chocolate', this)">
+      <span>Chocolate</span><b>1,145</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Drink', this)">
+      <span>Drinks</span><b>1,156</b>
+    </div>
+
+    <div class="side-item" onclick="filterCategory('Chicken', this)">
+      <span>Chicken</span><b>985</b>
+    </div>
+  </aside>
+
+  <main class="food-content">
+    <div class="top-line">
+      <h2>Food Results</h2>
+      <span id="resultCount">Showing items</span>
+    </div>
+
+    <div class="food-grid" id="foodGrid"></div>
+
+    <div class="empty-message" id="emptyMessage">
+      <h3>No food found</h3>
+      <p>Try apple, chicken, tabbouleh, shawarma, oreo, mars...</p>
+    </div>
+  </main>
+
+</div>
+
+<footer>
+  <p>© 2026 VitaPulse | Student Nutrition Project</p>
+</footer>
+
+
+<script>
+let allFoods = [];
+let currentCategory = "All";
+
+
+ 
+
+const foods = [
+
+{
+  name: "Apple",
+  category: "Fruit",
+  caloriesPer100g: 52,
+  proteinPer100g: 0.3,
+  carbsPer100g: 14,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Banana",
+  category: "Fruit",
+  caloriesPer100g: 89,
+  proteinPer100g: 1.1,
+  carbsPer100g: 23,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1574226516831-e1dff420e37f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Orange",
+  category: "Fruit",
+  caloriesPer100g: 47,
+  proteinPer100g: 0.9,
+  carbsPer100g: 12,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mango",
+  category: "Fruit",
+  caloriesPer100g: 60,
+  proteinPer100g: 0.8,
+  carbsPer100g: 15,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Strawberry",
+  category: "Fruit",
+  caloriesPer100g: 32,
+  proteinPer100g: 0.7,
+  carbsPer100g: 8,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Watermelon",
+  category: "Fruit",
+  caloriesPer100g: 30,
+  proteinPer100g: 0.6,
+  carbsPer100g: 8,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Avocado",
+  category: "Fruit",
+  caloriesPer100g: 160,
+  proteinPer100g: 2,
+  carbsPer100g: 9,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kiwi",
+  category: "Fruit",
+  caloriesPer100g: 61,
+  proteinPer100g: 1.1,
+  carbsPer100g: 15,
+  fatsPer100g: 0.5,
+  image: "https://images.unsplash.com/photo-1585059895524-72359e06133a?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pineapple",
+  category: "Fruit",
+  caloriesPer100g: 50,
+  proteinPer100g: 0.5,
+  carbsPer100g: 13,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Peach",
+  category: "Fruit",
+  caloriesPer100g: 39,
+  proteinPer100g: 0.9,
+  carbsPer100g: 10,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1629828874514-9d69d11fdb0c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pear",
+  category: "Fruit",
+  caloriesPer100g: 57,
+  proteinPer100g: 0.4,
+  carbsPer100g: 15,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cherry",
+  category: "Fruit",
+  caloriesPer100g: 50,
+  proteinPer100g: 1,
+  carbsPer100g: 12,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Blueberry",
+  category: "Fruit",
+  caloriesPer100g: 57,
+  proteinPer100g: 0.7,
+  carbsPer100g: 14,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Raspberry",
+  category: "Fruit",
+  caloriesPer100g: 52,
+  proteinPer100g: 1.2,
+  carbsPer100g: 12,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1577069861033-55d04cec4ef5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Blackberry",
+  category: "Fruit",
+  caloriesPer100g: 43,
+  proteinPer100g: 1.4,
+  carbsPer100g: 10,
+  fatsPer100g: 0.5,
+  image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lemon",
+  category: "Fruit",
+  caloriesPer100g: 29,
+  proteinPer100g: 1.1,
+  carbsPer100g: 9,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1590502593747-42a996133562?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lime",
+  category: "Fruit",
+  caloriesPer100g: 30,
+  proteinPer100g: 0.7,
+  carbsPer100g: 11,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Papaya",
+  category: "Fruit",
+  caloriesPer100g: 43,
+  proteinPer100g: 0.5,
+  carbsPer100g: 11,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pomegranate",
+  category: "Fruit",
+  caloriesPer100g: 83,
+  proteinPer100g: 1.7,
+  carbsPer100g: 19,
+  fatsPer100g: 1.2,
+  image: "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Grapes",
+  category: "Fruit",
+  caloriesPer100g: 69,
+  proteinPer100g: 0.7,
+  carbsPer100g: 18,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1515778767554-1951b258d5df?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Guava",
+  category: "Fruit",
+  caloriesPer100g: 68,
+  proteinPer100g: 2.6,
+  carbsPer100g: 14,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Dragon Fruit",
+  category: "Fruit",
+  caloriesPer100g: 60,
+  proteinPer100g: 1.2,
+  carbsPer100g: 13,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1527325678964-54921661f888?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Coconut",
+  category: "Fruit",
+  caloriesPer100g: 354,
+  proteinPer100g: 3.3,
+  carbsPer100g: 15,
+  fatsPer100g: 33,
+  image: "https://images.unsplash.com/photo-1581375271525-4b7f5f3e6b62?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Apricot",
+  category: "Fruit",
+  caloriesPer100g: 48,
+  proteinPer100g: 1.4,
+  carbsPer100g: 11,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1595412017587-b7f75b0b76c4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Plum",
+  category: "Fruit",
+  caloriesPer100g: 46,
+  proteinPer100g: 0.7,
+  carbsPer100g: 11,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1577003833619-76bbd7f82948?w=400&h=300&fit=crop"
+}
+,,
+{
+  name: "Passion Fruit",
+  category: "Fruit",
+  caloriesPer100g: 97,
+  proteinPer100g: 2.2,
+  carbsPer100g: 23,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lychee",
+  category: "Fruit",
+  caloriesPer100g: 66,
+  proteinPer100g: 0.8,
+  carbsPer100g: 17,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cantaloupe",
+  category: "Fruit",
+  caloriesPer100g: 34,
+  proteinPer100g: 0.8,
+  carbsPer100g: 8,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Honeydew Melon",
+  category: "Fruit",
+  caloriesPer100g: 36,
+  proteinPer100g: 0.5,
+  carbsPer100g: 9,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Tangerine",
+  category: "Fruit",
+  caloriesPer100g: 53,
+  proteinPer100g: 0.8,
+  carbsPer100g: 13,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cranberry",
+  category: "Fruit",
+  caloriesPer100g: 46,
+  proteinPer100g: 0.4,
+  carbsPer100g: 12,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mulberry",
+  category: "Fruit",
+  caloriesPer100g: 43,
+  proteinPer100g: 1.4,
+  carbsPer100g: 10,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1596591606875-3d6f1f0a5d6c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Jackfruit",
+  category: "Fruit",
+  caloriesPer100g: 95,
+  proteinPer100g: 1.7,
+  carbsPer100g: 23,
+  fatsPer100g: 0.6,
+  image: "https://images.unsplash.com/photo-1596591606875-3d6f1f0a5d6c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Starfruit",
+  category: "Fruit",
+  caloriesPer100g: 31,
+  proteinPer100g: 1,
+  carbsPer100g: 7,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1630563451961-ac2ff27616ab?w=400&h=300&fit=crop"
+},
+
+,
+{
+  name: "Yam",
+  category: "Vegetable",
+  caloriesPer100g: 118,
+  proteinPer100g: 1.5,
+  carbsPer100g: 28,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cassava",
+  category: "Vegetable",
+  caloriesPer100g: 160,
+  proteinPer100g: 1.4,
+  carbsPer100g: 38,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1582515073490-dc8aac8d5f41?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Watercress",
+  category: "Vegetable",
+  caloriesPer100g: 11,
+  proteinPer100g: 2.3,
+  carbsPer100g: 1.3,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Endive",
+  category: "Vegetable",
+  caloriesPer100g: 17,
+  proteinPer100g: 1.3,
+  carbsPer100g: 3.4,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1622205313162-be1d5712a43d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Collard Greens",
+  category: "Vegetable",
+  caloriesPer100g: 32,
+  proteinPer100g: 3,
+  carbsPer100g: 6,
+  fatsPer100g: 0.6,
+  image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mustard Greens",
+  category: "Vegetable",
+  caloriesPer100g: 27,
+  proteinPer100g: 2.9,
+  carbsPer100g: 4.7,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Daikon",
+  category: "Vegetable",
+  caloriesPer100g: 18,
+  proteinPer100g: 0.6,
+  carbsPer100g: 4.1,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chayote",
+  category: "Vegetable",
+  caloriesPer100g: 19,
+  proteinPer100g: 0.8,
+  carbsPer100g: 4.5,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1594282486552-05a1f2c2d182?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Turnip Greens",
+  category: "Vegetable",
+  caloriesPer100g: 32,
+  proteinPer100g: 1.5,
+  carbsPer100g: 7,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Butternut Squash",
+  category: "Vegetable",
+  caloriesPer100g: 45,
+  proteinPer100g: 1,
+  carbsPer100g: 12,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Acorn Squash",
+  category: "Vegetable",
+  caloriesPer100g: 40,
+  proteinPer100g: 1,
+  carbsPer100g: 10,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Seaweed",
+  category: "Vegetable",
+  caloriesPer100g: 45,
+  proteinPer100g: 5,
+  carbsPer100g: 9,
+  fatsPer100g: 0.6,
+  image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lotus Root",
+  category: "Vegetable",
+  caloriesPer100g: 74,
+  proteinPer100g: 2.6,
+  carbsPer100g: 17,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Purple Carrot",
+  category: "Vegetable",
+  caloriesPer100g: 41,
+  proteinPer100g: 0.9,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1447175008436-054170c2e979?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Yellow Beet",
+  category: "Vegetable",
+  caloriesPer100g: 43,
+  proteinPer100g: 1.6,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Romanesco",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 2.5,
+  carbsPer100g: 6,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Microgreens",
+  category: "Vegetable",
+  caloriesPer100g: 29,
+  proteinPer100g: 2.7,
+  carbsPer100g: 5,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Purple Cabbage",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 1.4,
+  carbsPer100g: 7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Baby Corn",
+  category: "Vegetable",
+  caloriesPer100g: 26,
+  proteinPer100g: 2,
+  carbsPer100g: 5,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Shallot",
+  category: "Vegetable",
+  caloriesPer100g: 72,
+  proteinPer100g: 2.5,
+  carbsPer100g: 17,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=400&h=300&fit=crop"
+},
+
+
+{
+  name: "Persimmon",
+  category: "Fruit",
+  caloriesPer100g: 70,
+  proteinPer100g: 0.6,
+  carbsPer100g: 19,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1603048719539-9ecb8f5c4d53?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Durian",
+  category: "Fruit",
+  caloriesPer100g: 147,
+  proteinPer100g: 1.5,
+  carbsPer100g: 27,
+  fatsPer100g: 5,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Rambutan",
+  category: "Fruit",
+  caloriesPer100g: 68,
+  proteinPer100g: 0.9,
+  carbsPer100g: 16,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Soursop",
+  category: "Fruit",
+  caloriesPer100g: 66,
+  proteinPer100g: 1,
+  carbsPer100g: 17,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1603046891744-76e6481d1f1d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mangosteen",
+  category: "Fruit",
+  caloriesPer100g: 73,
+  proteinPer100g: 0.6,
+  carbsPer100g: 18,
+  fatsPer100g: 0.6,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Longan",
+  category: "Fruit",
+  caloriesPer100g: 60,
+  proteinPer100g: 1.3,
+  carbsPer100g: 15,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Sapodilla",
+  category: "Fruit",
+  caloriesPer100g: 83,
+  proteinPer100g: 0.4,
+  carbsPer100g: 20,
+  fatsPer100g: 1.1,
+  image: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Quince",
+  category: "Fruit",
+  caloriesPer100g: 57,
+  proteinPer100g: 0.4,
+  carbsPer100g: 15,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pomelo",
+  category: "Fruit",
+  caloriesPer100g: 38,
+  proteinPer100g: 0.8,
+  carbsPer100g: 10,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Boysenberry",
+  category: "Fruit",
+  caloriesPer100g: 50,
+  proteinPer100g: 1.1,
+  carbsPer100g: 12,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Red Currant",
+  category: "Fruit",
+  caloriesPer100g: 56,
+  proteinPer100g: 1.4,
+  carbsPer100g: 14,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Tomato",
+  category: "Vegetable",
+  caloriesPer100g: 18,
+  proteinPer100g: 0.9,
+  carbsPer100g: 3.9,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cucumber",
+  category: "Vegetable",
+  caloriesPer100g: 15,
+  proteinPer100g: 0.7,
+  carbsPer100g: 3.6,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Potato",
+  category: "Vegetable",
+  caloriesPer100g: 77,
+  proteinPer100g: 2,
+  carbsPer100g: 17,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Carrot",
+  category: "Vegetable",
+  caloriesPer100g: 41,
+  proteinPer100g: 0.9,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1447175008436-054170c2e979?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Broccoli",
+  category: "Vegetable",
+  caloriesPer100g: 34,
+  proteinPer100g: 2.8,
+  carbsPer100g: 7,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Spinach",
+  category: "Vegetable",
+  caloriesPer100g: 23,
+  proteinPer100g: 2.9,
+  carbsPer100g: 3.6,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Eggplant",
+  category: "Vegetable",
+  caloriesPer100g: 25,
+  proteinPer100g: 1,
+  carbsPer100g: 6,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1603048719539-9ecb8f5c4d53?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Onion",
+  category: "Vegetable",
+  caloriesPer100g: 40,
+  proteinPer100g: 1.1,
+  carbsPer100g: 9,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Garlic",
+  category: "Vegetable",
+  caloriesPer100g: 149,
+  proteinPer100g: 6.4,
+  carbsPer100g: 33,
+  fatsPer100g: 0.5,
+  image: "https://images.unsplash.com/photo-1615477550927-6ec8f5f1f5c6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Zucchini",
+  category: "Vegetable",
+  caloriesPer100g: 17,
+  proteinPer100g: 1.2,
+  carbsPer100g: 3.1,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1594282486552-05a1f2c2d182?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cauliflower",
+  category: "Vegetable",
+  caloriesPer100g: 25,
+  proteinPer100g: 1.9,
+  carbsPer100g: 5,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cabbage",
+  category: "Vegetable",
+  caloriesPer100g: 25,
+  proteinPer100g: 1.3,
+  carbsPer100g: 6,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bell Pepper",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 1,
+  carbsPer100g: 6,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Sweet Corn",
+  category: "Vegetable",
+  caloriesPer100g: 86,
+  proteinPer100g: 3.2,
+  carbsPer100g: 19,
+  fatsPer100g: 1.2,
+  image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lettuce",
+  category: "Vegetable",
+  caloriesPer100g: 15,
+  proteinPer100g: 1.4,
+  carbsPer100g: 2.9,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1622205313162-be1d5712a43d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Radish",
+  category: "Vegetable",
+  caloriesPer100g: 16,
+  proteinPer100g: 0.7,
+  carbsPer100g: 3.4,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Beetroot",
+  category: "Vegetable",
+  caloriesPer100g: 43,
+  proteinPer100g: 1.6,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Green Beans",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 1.8,
+  carbsPer100g: 7,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1567375698348-5d9d5ae99de0?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Peas",
+  category: "Vegetable",
+  caloriesPer100g: 81,
+  proteinPer100g: 5.4,
+  carbsPer100g: 14,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Celery",
+  category: "Vegetable",
+  caloriesPer100g: 14,
+  proteinPer100g: 0.7,
+  carbsPer100g: 3,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1580391564590-aeca65c5e2d3?w=400&h=300&fit=crop"
+}
+
+,
+{
+  name: "Asparagus",
+  category: "Vegetable",
+  caloriesPer100g: 20,
+  proteinPer100g: 2.2,
+  carbsPer100g: 3.9,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1515471209610-d5f4f0f1d6b1?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pumpkin",
+  category: "Vegetable",
+  caloriesPer100g: 26,
+  proteinPer100g: 1,
+  carbsPer100g: 7,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Sweet Potato",
+  category: "Vegetable",
+  caloriesPer100g: 86,
+  proteinPer100g: 1.6,
+  carbsPer100g: 20,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kale",
+  category: "Vegetable",
+  caloriesPer100g: 49,
+  proteinPer100g: 4.3,
+  carbsPer100g: 9,
+  fatsPer100g: 0.9,
+  image: "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Leek",
+  category: "Vegetable",
+  caloriesPer100g: 61,
+  proteinPer100g: 1.5,
+  carbsPer100g: 14,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Artichoke",
+  category: "Vegetable",
+  caloriesPer100g: 47,
+  proteinPer100g: 3.3,
+  carbsPer100g: 11,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1603046891744-76e6481d1f1d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Brussels Sprouts",
+  category: "Vegetable",
+  caloriesPer100g: 43,
+  proteinPer100g: 3.4,
+  carbsPer100g: 9,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Turnip",
+  category: "Vegetable",
+  caloriesPer100g: 28,
+  proteinPer100g: 0.9,
+  carbsPer100g: 6,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Okra",
+  category: "Vegetable",
+  caloriesPer100g: 33,
+  proteinPer100g: 1.9,
+  carbsPer100g: 7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1603048719539-9ecb8f5c4d53?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mushroom",
+  category: "Vegetable",
+  caloriesPer100g: 22,
+  proteinPer100g: 3.1,
+  carbsPer100g: 3.3,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Parsley",
+  category: "Vegetable",
+  caloriesPer100g: 36,
+  proteinPer100g: 3,
+  carbsPer100g: 6,
+  fatsPer100g: 0.8,
+  image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mint",
+  category: "Vegetable",
+  caloriesPer100g: 44,
+  proteinPer100g: 3.3,
+  carbsPer100g: 8,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1628773822503-930a7eaecf80?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Dill",
+  category: "Vegetable",
+  caloriesPer100g: 43,
+  proteinPer100g: 3.5,
+  carbsPer100g: 7,
+  fatsPer100g: 1.1,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chili Pepper",
+  category: "Vegetable",
+  caloriesPer100g: 40,
+  proteinPer100g: 2,
+  carbsPer100g: 9,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Red Cabbage",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 1.4,
+  carbsPer100g: 7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "White Radish",
+  category: "Vegetable",
+  caloriesPer100g: 18,
+  proteinPer100g: 0.6,
+  carbsPer100g: 4,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Swiss Chard",
+  category: "Vegetable",
+  caloriesPer100g: 19,
+  proteinPer100g: 1.8,
+  carbsPer100g: 3.7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bok Choy",
+  category: "Vegetable",
+  caloriesPer100g: 13,
+  proteinPer100g: 1.5,
+  carbsPer100g: 2.2,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Arugula",
+  category: "Vegetable",
+  caloriesPer100g: 25,
+  proteinPer100g: 2.6,
+  carbsPer100g: 3.7,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1622205313162-be1d5712a43d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Fennel",
+  category: "Vegetable",
+  caloriesPer100g: 31,
+  proteinPer100g: 1.2,
+  carbsPer100g: 7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Horseradish",
+  category: "Vegetable",
+  caloriesPer100g: 48,
+  proteinPer100g: 1.2,
+  carbsPer100g: 11,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Turmeric Root",
+  category: "Vegetable",
+  caloriesPer100g: 96,
+  proteinPer100g: 2,
+  carbsPer100g: 22,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Ginger",
+  category: "Vegetable",
+  caloriesPer100g: 80,
+  proteinPer100g: 1.8,
+  carbsPer100g: 18,
+  fatsPer100g: 0.8,
+  image: "https://images.unsplash.com/photo-1615485299974-8d5c8b2c5d7d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Snap Peas",
+  category: "Vegetable",
+  caloriesPer100g: 42,
+  proteinPer100g: 2.8,
+  carbsPer100g: 7.5,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Snow Peas",
+  category: "Vegetable",
+  caloriesPer100g: 42,
+  proteinPer100g: 2.8,
+  carbsPer100g: 7.5,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Edamame",
+  category: "Vegetable",
+  caloriesPer100g: 121,
+  proteinPer100g: 11,
+  carbsPer100g: 9,
+  fatsPer100g: 5,
+  image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Scallion",
+  category: "Vegetable",
+  caloriesPer100g: 32,
+  proteinPer100g: 1.8,
+  carbsPer100g: 7,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1508747703725-719777637510?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bamboo Shoots",
+  category: "Vegetable",
+  caloriesPer100g: 27,
+  proteinPer100g: 2.6,
+  carbsPer100g: 5,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Parsnip",
+  category: "Vegetable",
+  caloriesPer100g: 75,
+  proteinPer100g: 1.2,
+  carbsPer100g: 18,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1447175008436-054170c2e979?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Rutabaga",
+  category: "Vegetable",
+  caloriesPer100g: 37,
+  proteinPer100g: 1.1,
+  carbsPer100g: 8.6,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Taro Root",
+  category: "Vegetable",
+  caloriesPer100g: 112,
+  proteinPer100g: 1.5,
+  carbsPer100g: 26,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1582515073490-dc8aac8d5f41?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Jicama",
+  category: "Vegetable",
+  caloriesPer100g: 38,
+  proteinPer100g: 0.7,
+  carbsPer100g: 9,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1594282486552-05a1f2c2d182?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kohlrabi",
+  category: "Vegetable",
+  caloriesPer100g: 27,
+  proteinPer100g: 1.7,
+  carbsPer100g: 6,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Sorrel",
+  category: "Vegetable",
+  caloriesPer100g: 22,
+  proteinPer100g: 2,
+  carbsPer100g: 3,
+  fatsPer100g: 0.7,
+  image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Malabar Spinach",
+  category: "Vegetable",
+  caloriesPer100g: 19,
+  proteinPer100g: 1.8,
+  carbsPer100g: 3.4,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Celeriac",
+  category: "Vegetable",
+  caloriesPer100g: 42,
+  proteinPer100g: 1.5,
+  carbsPer100g: 9,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1580391564590-aeca65c5e2d3?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pattypan Squash",
+  category: "Vegetable",
+  caloriesPer100g: 18,
+  proteinPer100g: 1.2,
+  carbsPer100g: 4,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Green Zucchini",
+  category: "Vegetable",
+  caloriesPer100g: 17,
+  proteinPer100g: 1.2,
+  carbsPer100g: 3.1,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1594282486552-05a1f2c2d182?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Yellow Squash",
+  category: "Vegetable",
+  caloriesPer100g: 16,
+  proteinPer100g: 1.2,
+  carbsPer100g: 3.4,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Radicchio",
+  category: "Vegetable",
+  caloriesPer100g: 23,
+  proteinPer100g: 1.4,
+  carbsPer100g: 4.5,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1622205313162-be1d5712a43d?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Oreo Cookies",
+  category: "Snack",
+  caloriesPer100g: 480,
+  proteinPer100g: 4.8,
+  carbsPer100g: 75,
+  fatsPer100g: 20,
+  image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Potato Chips",
+  category: "Snack",
+  caloriesPer100g: 536,
+  proteinPer100g: 7,
+  carbsPer100g: 53,
+  fatsPer100g: 35,
+  image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Popcorn",
+  category: "Snack",
+  caloriesPer100g: 387,
+  proteinPer100g: 13,
+  carbsPer100g: 78,
+  fatsPer100g: 4,
+  image: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pretzels",
+  category: "Snack",
+  caloriesPer100g: 380,
+  proteinPer100g: 10,
+  carbsPer100g: 80,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Nachos",
+  category: "Snack",
+  caloriesPer100g: 489,
+  proteinPer100g: 7,
+  carbsPer100g: 57,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Rice Cakes",
+  category: "Snack",
+  caloriesPer100g: 387,
+  proteinPer100g: 8,
+  carbsPer100g: 81,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Granola Bar",
+  category: "Snack",
+  caloriesPer100g: 471,
+  proteinPer100g: 10,
+  carbsPer100g: 64,
+  fatsPer100g: 20,
+  image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheese Crackers",
+  category: "Snack",
+  caloriesPer100g: 502,
+  proteinPer100g: 8,
+  carbsPer100g: 63,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Salted Peanuts",
+  category: "Snack",
+  caloriesPer100g: 567,
+  proteinPer100g: 26,
+  carbsPer100g: 16,
+  fatsPer100g: 49,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mixed Nuts",
+  category: "Snack",
+  caloriesPer100g: 607,
+  proteinPer100g: 20,
+  carbsPer100g: 21,
+  fatsPer100g: 54,
+  image: "https://images.unsplash.com/photo-1599599810694-b5b37304c041?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Trail Mix",
+  category: "Snack",
+  caloriesPer100g: 462,
+  proteinPer100g: 14,
+  carbsPer100g: 44,
+  fatsPer100g: 29,
+  image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Butter Crackers",
+  category: "Snack",
+  caloriesPer100g: 502,
+  proteinPer100g: 7,
+  carbsPer100g: 61,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Corn Chips",
+  category: "Snack",
+  caloriesPer100g: 557,
+  proteinPer100g: 7,
+  carbsPer100g: 63,
+  fatsPer100g: 31,
+  image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Protein Bar",
+  category: "Snack",
+  caloriesPer100g: 350,
+  proteinPer100g: 30,
+  carbsPer100g: 35,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mini Donuts",
+  category: "Snack",
+  caloriesPer100g: 452,
+  proteinPer100g: 4,
+  carbsPer100g: 51,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cupcake",
+  category: "Snack",
+  caloriesPer100g: 389,
+  proteinPer100g: 4,
+  carbsPer100g: 56,
+  fatsPer100g: 17,
+  image: "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Muffin",
+  category: "Snack",
+  caloriesPer100g: 377,
+  proteinPer100g: 6,
+  carbsPer100g: 53,
+  fatsPer100g: 16,
+  image: "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Croissant",
+  category: "Snack",
+  caloriesPer100g: 406,
+  proteinPer100g: 8,
+  carbsPer100g: 45,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1555507036-ab794f4afe5b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bagel Chips",
+  category: "Snack",
+  caloriesPer100g: 438,
+  proteinPer100g: 12,
+  carbsPer100g: 71,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Cookies",
+  category: "Snack",
+  caloriesPer100g: 488,
+  proteinPer100g: 5,
+  carbsPer100g: 68,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Cheese Puffs",
+  category: "Snack",
+  caloriesPer100g: 560,
+  proteinPer100g: 6,
+  carbsPer100g: 56,
+  fatsPer100g: 35,
+  image: "https://images.unsplash.com/photo-1619740455993-9e612b1af0da?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Onion Rings",
+  category: "Snack",
+  caloriesPer100g: 411,
+  proteinPer100g: 5,
+  carbsPer100g: 41,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "French Fries",
+  category: "Snack",
+  caloriesPer100g: 312,
+  proteinPer100g: 3.4,
+  carbsPer100g: 41,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mozzarella Sticks",
+  category: "Snack",
+  caloriesPer100g: 318,
+  proteinPer100g: 14,
+  carbsPer100g: 23,
+  fatsPer100g: 19,
+  image: "https://images.unsplash.com/photo-1548340748-6d2b7d7da280?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Nuggets",
+  category: "Snack",
+  caloriesPer100g: 296,
+  proteinPer100g: 15,
+  carbsPer100g: 18,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Waffles",
+  category: "Snack",
+  caloriesPer100g: 291,
+  proteinPer100g: 8,
+  carbsPer100g: 33,
+  fatsPer100g: 14,
+  image: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pancakes",
+  category: "Snack",
+  caloriesPer100g: 227,
+  proteinPer100g: 6,
+  carbsPer100g: 28,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cinnamon Roll",
+  category: "Snack",
+  caloriesPer100g: 436,
+  proteinPer100g: 5,
+  carbsPer100g: 56,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Brownie",
+  category: "Snack",
+  caloriesPer100g: 466,
+  proteinPer100g: 5,
+  carbsPer100g: 58,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheesecake",
+  category: "Snack",
+  caloriesPer100g: 321,
+  proteinPer100g: 6,
+  carbsPer100g: 25,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Macarons",
+  category: "Snack",
+  caloriesPer100g: 450,
+  proteinPer100g: 7,
+  carbsPer100g: 55,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1558326567-98ae2405596b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Ice Cream Sandwich",
+  category: "Snack",
+  caloriesPer100g: 270,
+  proteinPer100g: 4,
+  carbsPer100g: 37,
+  fatsPer100g: 11,
+  image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Churros",
+  category: "Snack",
+  caloriesPer100g: 447,
+  proteinPer100g: 5,
+  carbsPer100g: 49,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Apple Pie",
+  category: "Snack",
+  caloriesPer100g: 237,
+  proteinPer100g: 2.4,
+  carbsPer100g: 34,
+  fatsPer100g: 11,
+  image: "https://images.unsplash.com/photo-1562007908-17c67e878c88?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Hot Dog",
+  category: "Snack",
+  caloriesPer100g: 290,
+  proteinPer100g: 11,
+  carbsPer100g: 18,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1612392062798-3ca8fdaeb3f7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mini Pizza",
+  category: "Snack",
+  caloriesPer100g: 266,
+  proteinPer100g: 11,
+  carbsPer100g: 33,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Taco Chips",
+  category: "Snack",
+  caloriesPer100g: 497,
+  proteinPer100g: 7,
+  carbsPer100g: 63,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Donut Holes",
+  category: "Snack",
+  caloriesPer100g: 412,
+  proteinPer100g: 4,
+  carbsPer100g: 51,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Vanilla Cake",
+  category: "Snack",
+  caloriesPer100g: 389,
+  proteinPer100g: 4,
+  carbsPer100g: 58,
+  fatsPer100g: 16,
+  image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Wafers",
+  category: "Snack",
+  caloriesPer100g: 510,
+  proteinPer100g: 6,
+  carbsPer100g: 65,
+  fatsPer100g: 26,
+  image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop"
+},
+
+,
+{
+  name: "Stuffed Pretzel",
+  category: "Snack",
+  caloriesPer100g: 390,
+  proteinPer100g: 9,
+  carbsPer100g: 58,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheddar Biscuits",
+  category: "Snack",
+  caloriesPer100g: 420,
+  proteinPer100g: 8,
+  carbsPer100g: 48,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mini Croissants",
+  category: "Snack",
+  caloriesPer100g: 406,
+  proteinPer100g: 8,
+  carbsPer100g: 45,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1555507036-ab794f4afe5b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Donut",
+  category: "Snack",
+  caloriesPer100g: 452,
+  proteinPer100g: 4,
+  carbsPer100g: 52,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Blueberry Muffin",
+  category: "Snack",
+  caloriesPer100g: 377,
+  proteinPer100g: 5,
+  carbsPer100g: 53,
+  fatsPer100g: 16,
+  image: "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Vanilla Donut",
+  category: "Snack",
+  caloriesPer100g: 430,
+  proteinPer100g: 4,
+  carbsPer100g: 50,
+  fatsPer100g: 23,
+  image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Wrap",
+  category: "Snack",
+  caloriesPer100g: 270,
+  proteinPer100g: 14,
+  carbsPer100g: 24,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Beef Burger",
+  category: "Snack",
+  caloriesPer100g: 295,
+  proteinPer100g: 17,
+  carbsPer100g: 23,
+  fatsPer100g: 16,
+  image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheese Burger",
+  category: "Snack",
+  caloriesPer100g: 310,
+  proteinPer100g: 16,
+  carbsPer100g: 24,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Sandwich",
+  category: "Snack",
+  caloriesPer100g: 265,
+  proteinPer100g: 15,
+  carbsPer100g: 22,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Turkey Sandwich",
+  category: "Snack",
+  caloriesPer100g: 240,
+  proteinPer100g: 16,
+  carbsPer100g: 20,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bagel with Cheese",
+  category: "Snack",
+  caloriesPer100g: 350,
+  proteinPer100g: 11,
+  carbsPer100g: 48,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Croissant",
+  category: "Snack",
+  caloriesPer100g: 424,
+  proteinPer100g: 8,
+  carbsPer100g: 47,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1555507036-ab794f4afe5b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheese Pizza Slice",
+  category: "Snack",
+  caloriesPer100g: 285,
+  proteinPer100g: 12,
+  carbsPer100g: 36,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pepperoni Pizza",
+  category: "Snack",
+  caloriesPer100g: 313,
+  proteinPer100g: 13,
+  carbsPer100g: 33,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Caramel Popcorn",
+  category: "Snack",
+  caloriesPer100g: 420,
+  proteinPer100g: 4,
+  carbsPer100g: 72,
+  fatsPer100g: 14,
+  image: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Salted Crackers",
+  category: "Snack",
+  caloriesPer100g: 430,
+  proteinPer100g: 9,
+  carbsPer100g: 70,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Fruit Yogurt Cup",
+  category: "Snack",
+  caloriesPer100g: 120,
+  proteinPer100g: 4,
+  carbsPer100g: 18,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Frozen Yogurt",
+  category: "Snack",
+  caloriesPer100g: 159,
+  proteinPer100g: 4,
+  carbsPer100g: 24,
+  fatsPer100g: 4,
+  image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Strawberry Tart",
+  category: "Snack",
+  caloriesPer100g: 320,
+  proteinPer100g: 4,
+  carbsPer100g: 42,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?w=400&h=300&fit=crop"
+}
+,
+{
+  name: "Chicken Breast",
+  category: "Chicken",
+  caloriesPer100g: 165,
+  proteinPer100g: 31,
+  carbsPer100g: 0,
+  fatsPer100g: 3.6,
+  image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Grilled Chicken",
+  category: "Chicken",
+  caloriesPer100g: 180,
+  proteinPer100g: 28,
+  carbsPer100g: 0,
+  fatsPer100g: 6,
+  image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Fried Chicken",
+  category: "Chicken",
+  caloriesPer100g: 320,
+  proteinPer100g: 22,
+  carbsPer100g: 12,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Wings",
+  category: "Chicken",
+  caloriesPer100g: 290,
+  proteinPer100g: 27,
+  carbsPer100g: 5,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Burger",
+  category: "Chicken",
+  caloriesPer100g: 295,
+  proteinPer100g: 17,
+  carbsPer100g: 22,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Shawarma",
+  category: "Chicken",
+  caloriesPer100g: 250,
+  proteinPer100g: 18,
+  carbsPer100g: 14,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Nuggets",
+  category: "Chicken",
+  caloriesPer100g: 296,
+  proteinPer100g: 15,
+  carbsPer100g: 18,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Wrap",
+  category: "Chicken",
+  caloriesPer100g: 270,
+  proteinPer100g: 14,
+  carbsPer100g: 24,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Sandwich",
+  category: "Chicken",
+  caloriesPer100g: 265,
+  proteinPer100g: 15,
+  carbsPer100g: 22,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Tenders",
+  category: "Chicken",
+  caloriesPer100g: 295,
+  proteinPer100g: 20,
+  carbsPer100g: 14,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop"
+},
+
+{
+  name: "BBQ Chicken",
+  category: "Chicken",
+  caloriesPer100g: 210,
+  proteinPer100g: 24,
+  carbsPer100g: 6,
+  fatsPer100g: 9,
+  image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Roasted Chicken",
+  category: "Chicken",
+  caloriesPer100g: 190,
+  proteinPer100g: 27,
+  carbsPer100g: 0,
+  fatsPer100g: 8,
+  image: "https://images.unsplash.com/photo-1518492104633-130d0cc84637?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Spicy Chicken",
+  category: "Chicken",
+  caloriesPer100g: 230,
+  proteinPer100g: 23,
+  carbsPer100g: 4,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Drumsticks",
+  category: "Chicken",
+  caloriesPer100g: 215,
+  proteinPer100g: 27,
+  carbsPer100g: 0,
+  fatsPer100g: 11,
+  image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Thigh",
+  category: "Chicken",
+  caloriesPer100g: 209,
+  proteinPer100g: 26,
+  carbsPer100g: 0,
+  fatsPer100g: 11,
+  image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Caesar Wrap",
+  category: "Chicken",
+  caloriesPer100g: 280,
+  proteinPer100g: 16,
+  carbsPer100g: 21,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Pizza",
+  category: "Chicken",
+  caloriesPer100g: 285,
+  proteinPer100g: 13,
+  carbsPer100g: 34,
+  fatsPer100g: 11,
+  image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Pasta",
+  category: "Chicken",
+  caloriesPer100g: 220,
+  proteinPer100g: 12,
+  carbsPer100g: 25,
+  fatsPer100g: 8,
+  image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Rice Bowl",
+  category: "Chicken",
+  caloriesPer100g: 205,
+  proteinPer100g: 15,
+  carbsPer100g: 20,
+  fatsPer100g: 7,
+  image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Salad",
+  category: "Chicken",
+  caloriesPer100g: 145,
+  proteinPer100g: 18,
+  carbsPer100g: 5,
+  fatsPer100g: 6,
+  image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop"
+},
+
+,
+{
+  name: "Honey Garlic Chicken",
+  category: "Chicken",
+  caloriesPer100g: 245,
+  proteinPer100g: 22,
+  carbsPer100g: 11,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Teriyaki Chicken",
+  category: "Chicken",
+  caloriesPer100g: 225,
+  proteinPer100g: 23,
+  carbsPer100g: 10,
+  fatsPer100g: 9,
+  image: "https://images.unsplash.com/photo-1518492104633-130d0cc84637?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Alfredo",
+  category: "Chicken",
+  caloriesPer100g: 310,
+  proteinPer100g: 14,
+  carbsPer100g: 24,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Parmesan",
+  category: "Chicken",
+  caloriesPer100g: 295,
+  proteinPer100g: 22,
+  carbsPer100g: 12,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Water",
+  category: "Drink",
+  caloriesPer100g: 0,
+  proteinPer100g: 0,
+  carbsPer100g: 0,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Orange Juice",
+  category: "Drink",
+  caloriesPer100g: 45,
+  proteinPer100g: 0.7,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Apple Juice",
+  category: "Drink",
+  caloriesPer100g: 46,
+  proteinPer100g: 0.1,
+  carbsPer100g: 11,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1577805947697-89e18249d767?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mango Juice",
+  category: "Drink",
+  caloriesPer100g: 60,
+  proteinPer100g: 0.5,
+  carbsPer100g: 15,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Strawberry Juice",
+  category: "Drink",
+  caloriesPer100g: 41,
+  proteinPer100g: 0.8,
+  carbsPer100g: 9,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lemon Juice",
+  category: "Drink",
+  caloriesPer100g: 22,
+  proteinPer100g: 0.3,
+  carbsPer100g: 6,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pineapple Juice",
+  category: "Drink",
+  caloriesPer100g: 53,
+  proteinPer100g: 0.4,
+  carbsPer100g: 13,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Watermelon Juice",
+  category: "Drink",
+  caloriesPer100g: 30,
+  proteinPer100g: 0.6,
+  carbsPer100g: 8,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Banana Smoothie",
+  category: "Drink",
+  caloriesPer100g: 89,
+  proteinPer100g: 1.1,
+  carbsPer100g: 23,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Milkshake",
+  category: "Drink",
+  caloriesPer100g: 112,
+  proteinPer100g: 3.5,
+  carbsPer100g: 18,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Vanilla Milkshake",
+  category: "Drink",
+  caloriesPer100g: 118,
+  proteinPer100g: 3,
+  carbsPer100g: 19,
+  fatsPer100g: 4,
+  image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Iced Coffee",
+  category: "Drink",
+  caloriesPer100g: 35,
+  proteinPer100g: 1,
+  carbsPer100g: 6,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Latte",
+  category: "Drink",
+  caloriesPer100g: 54,
+  proteinPer100g: 3,
+  carbsPer100g: 5,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cappuccino",
+  category: "Drink",
+  caloriesPer100g: 40,
+  proteinPer100g: 2,
+  carbsPer100g: 4,
+  fatsPer100g: 1.5,
+  image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Espresso",
+  category: "Drink",
+  caloriesPer100g: 9,
+  proteinPer100g: 0.1,
+  carbsPer100g: 2,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mocha Coffee",
+  category: "Drink",
+  caloriesPer100g: 75,
+  proteinPer100g: 3,
+  carbsPer100g: 10,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1579888944880-d98341245702?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Green Tea",
+  category: "Drink",
+  caloriesPer100g: 1,
+  proteinPer100g: 0,
+  carbsPer100g: 0,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Black Tea",
+  category: "Drink",
+  caloriesPer100g: 2,
+  proteinPer100g: 0,
+  carbsPer100g: 0.5,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1594631661960-0d1d4f2c98b3?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bubble Tea",
+  category: "Drink",
+  caloriesPer100g: 120,
+  proteinPer100g: 1,
+  carbsPer100g: 28,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1558857563-b371033873b8?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Energy Drink",
+  category: "Drink",
+  caloriesPer100g: 45,
+  proteinPer100g: 0,
+  carbsPer100g: 11,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cola Soda",
+  category: "Drink",
+  caloriesPer100g: 42,
+  proteinPer100g: 0,
+  carbsPer100g: 10.6,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Diet Cola",
+  category: "Drink",
+  caloriesPer100g: 1,
+  proteinPer100g: 0,
+  carbsPer100g: 0,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Sprite",
+  category: "Drink",
+  caloriesPer100g: 38,
+  proteinPer100g: 0,
+  carbsPer100g: 9,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Iced Tea",
+  category: "Drink",
+  caloriesPer100g: 30,
+  proteinPer100g: 0,
+  carbsPer100g: 7,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Milk",
+  category: "Drink",
+  caloriesPer100g: 61,
+  proteinPer100g: 3.2,
+  carbsPer100g: 5,
+  fatsPer100g: 3.3,
+  image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Milk",
+  category: "Drink",
+  caloriesPer100g: 83,
+  proteinPer100g: 3.2,
+  carbsPer100g: 10,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Protein Shake",
+  category: "Drink",
+  caloriesPer100g: 95,
+  proteinPer100g: 20,
+  carbsPer100g: 4,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1514996937319-344454492b37?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Coconut Water",
+  category: "Drink",
+  caloriesPer100g: 19,
+  proteinPer100g: 0.7,
+  carbsPer100g: 4,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1581375271525-4b7f5f3e6b62?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Smoothie Bowl Drink",
+  category: "Drink",
+  caloriesPer100g: 95,
+  proteinPer100g: 2,
+  carbsPer100g: 18,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Peach Juice",
+  category: "Drink",
+  caloriesPer100g: 39,
+  proteinPer100g: 0.8,
+  carbsPer100g: 10,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1629828874514-25f6db1d5b7c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kiwi Juice",
+  category: "Drink",
+  caloriesPer100g: 44,
+  proteinPer100g: 0.9,
+  carbsPer100g: 11,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1585059895524-72359e06133a?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pomegranate Juice",
+  category: "Drink",
+  caloriesPer100g: 54,
+  proteinPer100g: 0.2,
+  carbsPer100g: 13,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Avocado Smoothie",
+  category: "Drink",
+  caloriesPer100g: 140,
+  proteinPer100g: 2,
+  carbsPer100g: 12,
+  fatsPer100g: 9,
+  image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Berry Smoothie",
+  category: "Drink",
+  caloriesPer100g: 88,
+  proteinPer100g: 1.5,
+  carbsPer100g: 19,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mint Lemonade",
+  category: "Drink",
+  caloriesPer100g: 36,
+  proteinPer100g: 0.2,
+  carbsPer100g: 9,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Turkish Coffee",
+  category: "Drink",
+  caloriesPer100g: 12,
+  proteinPer100g: 0.3,
+  carbsPer100g: 2,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Matcha Latte",
+  category: "Drink",
+  caloriesPer100g: 65,
+  proteinPer100g: 3,
+  carbsPer100g: 8,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Milk Tea",
+  category: "Drink",
+  caloriesPer100g: 78,
+  proteinPer100g: 2,
+  carbsPer100g: 12,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1558857563-b371033873b8?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Hazelnut Coffee",
+  category: "Drink",
+  caloriesPer100g: 70,
+  proteinPer100g: 2,
+  carbsPer100g: 9,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Caramel Latte",
+  category: "Drink",
+  caloriesPer100g: 95,
+  proteinPer100g: 3,
+  carbsPer100g: 15,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1579888944880-d98341245702?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mojito Drink",
+  category: "Drink",
+  caloriesPer100g: 48,
+  proteinPer100g: 0,
+  carbsPer100g: 12,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pepsi",
+  category: "Drink",
+  caloriesPer100g: 41,
+  proteinPer100g: 0,
+  carbsPer100g: 11,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Fanta Orange",
+  category: "Drink",
+  caloriesPer100g: 48,
+  proteinPer100g: 0,
+  carbsPer100g: 12,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mountain Dew",
+  category: "Drink",
+  caloriesPer100g: 46,
+  proteinPer100g: 0,
+  carbsPer100g: 11,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cold Brew Coffee",
+  category: "Drink",
+  caloriesPer100g: 15,
+  proteinPer100g: 1,
+  carbsPer100g: 2,
+  fatsPer100g: 0,
+  image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cherry Juice",
+  category: "Drink",
+  caloriesPer100g: 50,
+  proteinPer100g: 0.5,
+  carbsPer100g: 12,
+  fatsPer100g: 0.2,
+  image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Blueberry Smoothie",
+  category: "Drink",
+  caloriesPer100g: 92,
+  proteinPer100g: 1.7,
+  carbsPer100g: 20,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Raspberry Juice",
+  category: "Drink",
+  caloriesPer100g: 52,
+  proteinPer100g: 1,
+  carbsPer100g: 12,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Grape Juice",
+  category: "Drink",
+  caloriesPer100g: 60,
+  proteinPer100g: 0.4,
+  carbsPer100g: 15,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Pear Juice",
+  category: "Drink",
+  caloriesPer100g: 46,
+  proteinPer100g: 0.2,
+  carbsPer100g: 11,
+  fatsPer100g: 0.1,
+  image: "https://images.unsplash.com/photo-1514756331096-242fdeb70d4a?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Guava Juice",
+  category: "Drink",
+  caloriesPer100g: 58,
+  proteinPer100g: 1,
+  carbsPer100g: 14,
+  fatsPer100g: 0.4,
+  image: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Papaya Smoothie",
+  category: "Drink",
+  caloriesPer100g: 59,
+  proteinPer100g: 0.7,
+  carbsPer100g: 14,
+  fatsPer100g: 0.3,
+  image: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Coconut Smoothie",
+  category: "Drink",
+  caloriesPer100g: 122,
+  proteinPer100g: 2,
+  carbsPer100g: 10,
+  fatsPer100g: 8,
+  image: "https://images.unsplash.com/photo-1581375271525-4b7f5f3e6b62?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Oat Milk Latte",
+  category: "Drink",
+  caloriesPer100g: 72,
+  proteinPer100g: 2,
+  carbsPer100g: 9,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Iced Matcha",
+  category: "Drink",
+  caloriesPer100g: 38,
+  proteinPer100g: 1,
+  carbsPer100g: 6,
+  fatsPer100g: 1,
+  image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Snickers",
+  category: "Chocolate",
+  caloriesPer100g: 488,
+  proteinPer100g: 9,
+  carbsPer100g: 61,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mars Bar",
+  category: "Chocolate",
+  caloriesPer100g: 448,
+  proteinPer100g: 4,
+  carbsPer100g: 70,
+  fatsPer100g: 17,
+  image: "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "KitKat",
+  category: "Chocolate",
+  caloriesPer100g: 518,
+  proteinPer100g: 6,
+  carbsPer100g: 63,
+  fatsPer100g: 26,
+  image: "https://images.unsplash.com/photo-1619985632461-f33748ef8be3?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Twix",
+  category: "Chocolate",
+  caloriesPer100g: 502,
+  proteinPer100g: 4.5,
+  carbsPer100g: 64,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kinder Bueno",
+  category: "Chocolate",
+  caloriesPer100g: 567,
+  proteinPer100g: 8,
+  carbsPer100g: 50,
+  fatsPer100g: 37,
+  image: "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Ferrero Rocher",
+  category: "Chocolate",
+  caloriesPer100g: 579,
+  proteinPer100g: 8,
+  carbsPer100g: 45,
+  fatsPer100g: 42,
+  image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Dairy Milk",
+  category: "Chocolate",
+  caloriesPer100g: 534,
+  proteinPer100g: 7,
+  carbsPer100g: 57,
+  fatsPer100g: 30,
+  image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Milky Way",
+  category: "Chocolate",
+  caloriesPer100g: 455,
+  proteinPer100g: 4,
+  carbsPer100g: 72,
+  fatsPer100g: 16,
+  image: "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Bounty",
+  category: "Chocolate",
+  caloriesPer100g: 485,
+  proteinPer100g: 4,
+  carbsPer100g: 60,
+  fatsPer100g: 26,
+  image: "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Toblerone",
+  category: "Chocolate",
+  caloriesPer100g: 535,
+  proteinPer100g: 6,
+  carbsPer100g: 59,
+  fatsPer100g: 30,
+  image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Hershey Bar",
+  category: "Chocolate",
+  caloriesPer100g: 531,
+  proteinPer100g: 6,
+  carbsPer100g: 59,
+  fatsPer100g: 30,
+  image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Crunch Chocolate",
+  category: "Chocolate",
+  caloriesPer100g: 500,
+  proteinPer100g: 5,
+  carbsPer100g: 64,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Galaxy Chocolate",
+  category: "Chocolate",
+  caloriesPer100g: 546,
+  proteinPer100g: 6,
+  carbsPer100g: 57,
+  fatsPer100g: 32,
+  image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400&h=300&fit=crop"
+},
+
+{
+  name: "White Chocolate",
+  category: "Chocolate",
+  caloriesPer100g: 539,
+  proteinPer100g: 6,
+  carbsPer100g: 59,
+  fatsPer100g: 32,
+  image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Dark Chocolate",
+  category: "Chocolate",
+  caloriesPer100g: 598,
+  proteinPer100g: 8,
+  carbsPer100g: 46,
+  fatsPer100g: 43,
+  image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Milk Chocolate",
+  category: "Chocolate",
+  caloriesPer100g: 535,
+  proteinPer100g: 7,
+  carbsPer100g: 59,
+  fatsPer100g: 30,
+  image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Truffles",
+  category: "Chocolate",
+  caloriesPer100g: 560,
+  proteinPer100g: 5,
+  carbsPer100g: 50,
+  fatsPer100g: 38,
+  image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Wafer",
+  category: "Chocolate",
+  caloriesPer100g: 518,
+  proteinPer100g: 6,
+  carbsPer100g: 62,
+  fatsPer100g: 27,
+  image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Donut",
+  category: "Chocolate",
+  caloriesPer100g: 452,
+  proteinPer100g: 4,
+  carbsPer100g: 52,
+  fatsPer100g: 25,
+  image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chocolate Brownie",
+  category: "Chocolate",
+  caloriesPer100g: 466,
+  proteinPer100g: 5,
+  carbsPer100g: 58,
+  fatsPer100g: 24,
+  image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop"
+},
+,
+{
+  name: "Tabbouleh",
+  category: "Lebanese Food",
+  caloriesPer100g: 120,
+  proteinPer100g: 2.7,
+  carbsPer100g: 16,
+  fatsPer100g: 5.3,
+  image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Fattoush",
+  category: "Lebanese Food",
+  caloriesPer100g: 150,
+  proteinPer100g: 3,
+  carbsPer100g: 18,
+  fatsPer100g: 7,
+  image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Hummus",
+  category: "Lebanese Food",
+  caloriesPer100g: 166,
+  proteinPer100g: 8,
+  carbsPer100g: 14,
+  fatsPer100g: 9,
+  image: "https://images.unsplash.com/photo-1571197119282-7c4f7b1d0b3f?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Falafel",
+  category: "Lebanese Food",
+  caloriesPer100g: 333,
+  proteinPer100g: 13,
+  carbsPer100g: 31,
+  fatsPer100g: 17,
+  image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Chicken Shawarma",
+  category: "Lebanese Food",
+  caloriesPer100g: 250,
+  proteinPer100g: 18,
+  carbsPer100g: 14,
+  fatsPer100g: 13,
+  image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Beef Shawarma",
+  category: "Lebanese Food",
+  caloriesPer100g: 290,
+  proteinPer100g: 19,
+  carbsPer100g: 13,
+  fatsPer100g: 18,
+  image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kafta",
+  category: "Lebanese Food",
+  caloriesPer100g: 280,
+  proteinPer100g: 21,
+  carbsPer100g: 5,
+  fatsPer100g: 20,
+  image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Kibbeh",
+  category: "Lebanese Food",
+  caloriesPer100g: 340,
+  proteinPer100g: 14,
+  carbsPer100g: 24,
+  fatsPer100g: 21,
+  image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Warak Enab",
+  category: "Lebanese Food",
+  caloriesPer100g: 180,
+  proteinPer100g: 4,
+  carbsPer100g: 20,
+  fatsPer100g: 8,
+  image: "https://images.unsplash.com/photo-1604908554027-1b3d9f7c71d9?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mujadara",
+  category: "Lebanese Food",
+  caloriesPer100g: 230,
+  proteinPer100g: 8,
+  carbsPer100g: 35,
+  fatsPer100g: 6,
+  image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Manoushe Zaatar",
+  category: "Lebanese Food",
+  caloriesPer100g: 280,
+  proteinPer100g: 7,
+  carbsPer100g: 40,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Cheese Manoushe",
+  category: "Lebanese Food",
+  caloriesPer100g: 320,
+  proteinPer100g: 10,
+  carbsPer100g: 36,
+  fatsPer100g: 15,
+  image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Labneh",
+  category: "Lebanese Food",
+  caloriesPer100g: 140,
+  proteinPer100g: 6,
+  carbsPer100g: 5,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Labneh Sandwich",
+  category: "Lebanese Food",
+  caloriesPer100g: 210,
+  proteinPer100g: 7,
+  carbsPer100g: 24,
+  fatsPer100g: 9,
+  image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Shish Tawook",
+  category: "Lebanese Food",
+  caloriesPer100g: 220,
+  proteinPer100g: 24,
+  carbsPer100g: 3,
+  fatsPer100g: 12,
+  image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Mixed Grill",
+  category: "Lebanese Food",
+  caloriesPer100g: 310,
+  proteinPer100g: 23,
+  carbsPer100g: 6,
+  fatsPer100g: 22,
+  image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Rice with Vermicelli",
+  category: "Lebanese Food",
+  caloriesPer100g: 180,
+  proteinPer100g: 3,
+  carbsPer100g: 38,
+  fatsPer100g: 2,
+  image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Lentil Soup",
+  category: "Lebanese Food",
+  caloriesPer100g: 120,
+  proteinPer100g: 6,
+  carbsPer100g: 17,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Freekeh",
+  category: "Lebanese Food",
+  caloriesPer100g: 170,
+  proteinPer100g: 6,
+  carbsPer100g: 30,
+  fatsPer100g: 3,
+  image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop"
+},
+
+{
+  name: "Batata Harra",
+  category: "Lebanese Food",
+  caloriesPer100g: 210,
+  proteinPer100g: 3,
+  carbsPer100g: 28,
+  fatsPer100g: 10,
+  image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&h=300&fit=crop"
+}
+];
+
+function generateFoods() {
+  allFoods = foods;
+  document.getElementById("totalItems").innerText = allFoods.length;
+}
+
+function calculateByGram(valuePer100g, grams) {
+  return Math.round((valuePer100g * grams) / 100);
+}
+
+function displayFoods(foodList) {
+  const foodGrid = document.getElementById("foodGrid");
+  const resultCount = document.getElementById("resultCount");
+  const emptyMessage = document.getElementById("emptyMessage");
+
+  foodGrid.innerHTML = "";
+
+  if (foodList.length === 0) {
+    emptyMessage.style.display = "block";
+    resultCount.innerText = "0 results";
+    return;
+  }
+
+  emptyMessage.style.display = "none";
+  resultCount.innerText = "Showing " + foodList.length + " items";
+
+  foodList.forEach(function(food, index) {
+    foodGrid.innerHTML += `
+      <div class="food-card">
+        <img src="${food.image}" alt="${food.name}">
+
+        <div class="food-info">
+          <span class="category">${food.category}</span>
+          <h3>${food.name}</h3>
+
+          <label class="gram-label">Enter grams:</label>
+          <input 
+            class="gram-input"
+            type="number"
+            value="100"
+            min="1"
+            oninput="updateFoodCard(${index}, this.value)"
+          >
+
+          <div class="calories" id="calories-${index}">
+            ${food.caloriesPer100g} kcal
+          </div>
+
+          <div class="details">
+            <div class="detail-box">
+              <strong id="protein-${index}">${food.proteinPer100g}g</strong>
+              Protein
+            </div>
+
+            <div class="detail-box">
+              <strong id="carbs-${index}">${food.carbsPer100g}g</strong>
+              Carbs
+            </div>
+
+            <div class="detail-box">
+              <strong id="fats-${index}">${food.fatsPer100g}g</strong>
+              Fats
+            </div>
+          </div>
+
+          <p class="per-note">Values calculated per grams</p>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function updateFoodCard(index, grams) {
+  grams = Number(grams);
+
+  if (grams <= 0 || isNaN(grams)) {
+    grams = 1;
+  }
+
+  const food = allFoods[index];
+
+  document.getElementById("calories-" + index).innerText =
+    calculateByGram(food.caloriesPer100g, grams) + " kcal";
+
+  document.getElementById("protein-" + index).innerText =
+    ((food.proteinPer100g * grams) / 100).toFixed(1) + "g";
+
+  document.getElementById("carbs-" + index).innerText =
+    ((food.carbsPer100g * grams) / 100).toFixed(1) + "g";
+
+  document.getElementById("fats-" + index).innerText =
+    ((food.fatsPer100g * grams) / 100).toFixed(1) + "g";
+}
+
+function searchFood() {
+  const text = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  const result = allFoods.filter(function(food) {
+    const searchMatch =
+      food.name.toLowerCase().includes(text) ||
+      food.category.toLowerCase().includes(text);
+
+    const categoryMatch =
+      currentCategory === "All" || food.category === currentCategory;
+
+    return searchMatch && categoryMatch;
+  });
+
+  displayFoods(result);
+}
+
+function filterCategory(category, element) {
+  currentCategory = category;
+
+  document.querySelectorAll(".side-item").forEach(function(item) {
+    item.classList.remove("active");
+  });
+
+  element.classList.add("active");
+  searchFood();
+}
+
+document.getElementById("searchInput").addEventListener("keyup", searchFood);
+
+generateFoods();
+displayFoods(allFoods);
+
+</script>
+ 
+</body>
+</html>
